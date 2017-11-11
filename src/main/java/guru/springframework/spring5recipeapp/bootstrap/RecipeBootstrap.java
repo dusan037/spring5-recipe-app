@@ -1,28 +1,24 @@
 package guru.springframework.spring5recipeapp.bootstrap;
 
+import guru.springframework.spring5recipeapp.domain.*;
+import guru.springframework.spring5recipeapp.repositories.CategoryRepository;
+import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.stereotype.Component;
-
-import guru.springframework.spring5recipeapp.domain.Category;
-import guru.springframework.spring5recipeapp.domain.Difficulty;
-import guru.springframework.spring5recipeapp.domain.Ingredient;
-import guru.springframework.spring5recipeapp.domain.Notes;
-import guru.springframework.spring5recipeapp.domain.Recipe;
-import guru.springframework.spring5recipeapp.domain.UnitOfMeasure;
-import guru.springframework.spring5recipeapp.repositories.CategoryRepository;
-import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
-import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
-
 /**
  * Created by jt on 6/13/17.
  */
 @Component
+@Slf4j
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     private final CategoryRepository categoryRepository;
@@ -38,6 +34,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         recipeRepository.saveAll(getRecipes());
+        log.debug("Loading Bootstrap data");
     }
 
     private List<Recipe> getRecipes() {
