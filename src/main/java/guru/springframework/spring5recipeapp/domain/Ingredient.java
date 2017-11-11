@@ -1,11 +1,15 @@
 package guru.springframework.spring5recipeapp.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Data
+@EqualsAndHashCode(exclude = {"recipe"})
+@NoArgsConstructor
 @Entity
 public class Ingredient {
 
