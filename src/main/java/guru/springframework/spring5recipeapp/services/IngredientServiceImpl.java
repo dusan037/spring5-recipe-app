@@ -10,6 +10,7 @@ import guru.springframework.spring5recipeapp.converters.IngredientCommandToIngre
 import guru.springframework.spring5recipeapp.converters.IngredientToIngredientCommand;
 import guru.springframework.spring5recipeapp.domain.Ingredient;
 import guru.springframework.spring5recipeapp.domain.Recipe;
+import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
 import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,8 @@ public class IngredientServiceImpl implements IngredientService {
 
         if (!recipeOptional.isPresent()){
             //todo impl error handling
-            log.error("recipe id not found. Id: " + recipeId);
+            log.error("Recipe id not found. Id: " + recipeId);
+            throw new NotFoundException("Recipe id not found: " + recipeId);
         }
 
         Recipe recipe = recipeOptional.get();
@@ -49,8 +51,8 @@ public class IngredientServiceImpl implements IngredientService {
                                                                       .map( ingredient -> ingredientToIngredientCommand.convert(ingredient)).findFirst();
 
         if(!ingredientCommandOptional.isPresent()){
-            //todo impl error handling
             log.error("Ingredient id not found: " + ingredientId);
+            throw new NotFoundException("Ingredient id not found: " + ingredientId);
         }
 
         return ingredientCommandOptional.get();
@@ -134,9 +136,13 @@ public class IngredientServiceImpl implements IngredientService {
                 ingredientToDelete.setRecipe(null);
                 recipe.getIngredients().remove(ingredientOptional.get());
                 recipeRepository.save(recipe);
+            } else {
+                log.debug("Ingredient Id Not found. Id:" + idToDelete);
+                throw new NotFoundException("Ingredient Id Not found. Id:" + idToDelete);
             }
         } else {
             log.debug("Recipe Id Not found. Id:" + recipeId);
+            throw new NotFoundException("Recipe Id Not found. Id:" + recipeId);
         }
     }
 }
