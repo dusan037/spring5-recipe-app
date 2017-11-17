@@ -40,7 +40,7 @@ public class IngredientServiceImpl implements IngredientService {
 
         if (!recipeOptional.isPresent()){
             //todo impl error handling
-            log.error("Recipe id not found. Id: " + recipeId);
+            log.error("Recipe id not found. ID: " + recipeId);
             throw new NotFoundException("Recipe id not found: " + recipeId);
         }
 
